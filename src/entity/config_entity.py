@@ -5,7 +5,7 @@ import os
 
 load_dotenv()
 
-class DatabaseConfig:
+class DataBaseConfig:
     def __init__(self):
         self.USERNAME: str = os.environ['ATLAS_CLUSTER_USERNAME']
         self.PASSWORD: str = os.environ['ATLAS_CLUSTER_PASSWORD']
