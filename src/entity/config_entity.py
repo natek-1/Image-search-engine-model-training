@@ -9,9 +9,9 @@ class DataBaseConfig:
     def __init__(self):
         self.USERNAME: str = os.environ['ATLAS_CLUSTER_USERNAME']
         self.PASSWORD: str = os.environ['ATLAS_CLUSTER_PASSWORD']
-        self.URL: str = f"mongodb+srv://{self.username}:{self.password}@learn.fz36e1j.mongodb.net/?retryWrites=true&w=majority&appName=Learn"
+        self.URL: str = f"mongodb+srv://{self.USERNAME}:{self.PASSWORD}@learn.fz36e1j.mongodb.net/?retryWrites=true&w=majority&appName=Learn"
         self.DATABASENAME: str = os.environ["DATABASE_NAME"]
-        self.COLLECTOIN: str = "Embeddings"
+        self.COLLECTION: str = "Embeddings"
     
     def get_database_config(self):
         return self.__dict__
