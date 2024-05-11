@@ -7,6 +7,7 @@ scikit-learn
 pymongo==4.2.0
 annoy==1.17.1
 torch==2.1.1
+torchvision
 python-dotenv==0.21.0
 awscli==1.25.70
 PyYAML==3.10

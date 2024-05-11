@@ -6,7 +6,6 @@ from src.exception import CustomException
 from src.logger import logging
 from src.entity.config_entity import DataIngestionConfig
 from from_root import from_root
-from src.utils.storage_handler import S3Connector
 
 
 class DataIngestion:

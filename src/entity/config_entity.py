@@ -43,5 +43,18 @@ class DataIngestionConfig:
         self.RATIO: Tuple = (0.8, 0.1, 0.1)
         self.URI = os.environ["AWS_S3_URI"]
     
-    def get_data_ingestion_confgi(self):
+    def get_data_ingestion_config(self):
+        return self.__dict__
+
+class DataPreprocessingConfig:
+    def __init__(self):
+        self.BATCH_SIZE = 32
+        self.IMAGE_SIZE = 256
+        self.TRAIN_DATA_PATH = os.path.join(from_root(), "data", "split", "train")
+        self.TEST_DATA_PATH = os.path.join(from_root(), "data", "split", "test")
+        self.VALID_DATA_PATH = os.path.join(from_root(), "data", "split", "val")
+        self.MEAN = [0.485, 0.456, 0.406]
+        self.STD = [0.229, 0.224, 0.225]
+    
+    def get_data_preprocessing_config(self):
         return self.__dict__
