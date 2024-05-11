@@ -39,8 +39,9 @@ class DataIngestionConfig:
         self.RAW: str = "data/raw"
         self.SPILT: str= "data/split"
         self.BUCKET: str = os.environ['AWS_BUCKET_NAME']
-        self.seed: int = 42
+        self.SEED: int = 42
         self.RATIO: Tuple = (0.8, 0.1, 0.1)
+        self.URI = os.environ["AWS_S3_URI"]
     
     def get_data_ingestion_confgi(self):
         return self.__dict__
