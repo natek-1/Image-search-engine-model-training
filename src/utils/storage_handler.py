@@ -41,7 +41,7 @@ class S3Connector:
         #self.bucket.download_file(f'{self.config.KEY}/{self.config.ZIP_NAME}', self.config.ZIP_NAME)
         print(self.config.ZIP_NAME)
         with zipfile.ZipFile(self.config.ZIP_NAME, 'r') as zip_ref:
-            zip_ref.extractall(self.config.ZIP_NAME)
+            zip_ref.extractall()
         os.remove(self.config.ZIP_NAME)
 
 if __name__ == "__main__":
