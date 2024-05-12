@@ -165,3 +165,4 @@ data
 caltech-101/
 artifacts.tar.gz
 data.zip
+model/

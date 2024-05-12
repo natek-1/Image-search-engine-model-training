@@ -11,4 +11,5 @@ torchvision
 python-dotenv==0.21.0
 awscli==1.25.70
 PyYAML==3.10
+torchsummary
 -e .
