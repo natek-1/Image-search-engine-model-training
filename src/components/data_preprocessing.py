@@ -23,7 +23,7 @@ class DataPreprocessing:
             [
                 transforms.Resize(self.config.IMAGE_SIZE),
                 transforms.CenterCrop(self.config.IMAGE_SIZE),
-                transforms.ToTensor,
+                transforms.ToTensor(),
                 transforms.Normalize(mean=self.config.MEAN,
                                     std=self.config.STD)
             ]
