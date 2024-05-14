@@ -61,11 +61,11 @@ class DataPreprocessingConfig:
 
 class ModelConfig:
     def __init__(self):
-        self.NUM_LABEL = 101
         self.PATH = os.path.join(from_root(), "model", "benchmark")
         self.REPO = "pytorch/vision:v0.10.0"
         self.BASEMODEL = "resnet18"
         self.PRETRAINED = True
+        self.NUM_LABEL = 101
     
     def get_model_config(self):
         return self.__dict__
@@ -86,6 +86,8 @@ class ImageFolderConfig:
         self.LABEL_MAP = {}
         self.BUCKET = os.environ['AWS_BUCKET_NAME']
         self.S3_LINK = "https://{0}.s3.us-west-2.amazonaws.com/images/{1}/{2}"
+        self.MEAN = [0.485, 0.456, 0.406]
+        self.STD = [0.229, 0.224, 0.225]
     
     def get_image_folderconfig(self):
         return self.__dict__

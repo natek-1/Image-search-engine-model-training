@@ -34,7 +34,7 @@ class ImageFolder(Dataset):
         list_dir = os.listdir(self.config.ROOT_DIR)
 
         for class_path in list_dir:
-            full_path = os.path.join(list_dir, class_path)
+            full_path = os.path.join(self.config.ROOT_DIR, class_path)
             images = os.listdir(full_path)
             for image in images:
                 image_path = Path(f"{self.config.ROOT_DIR}/{class_path}/{image}")
@@ -68,15 +68,73 @@ class ImageFolder(Dataset):
 
     def __getitem__(self, index):
         record = self.image_record[index]
-        image, label, link = record.image, record.label, record.s3link
-        image = Image.open(image)
+        images, label, link = record.img, record.label, record.s3link
+        images = Image.open(images)
 
         if len(images.getbands()) < 3:
             images = images.convert('RGB')
         
-        image = np.array(self.tranform(image))
+        images = np.array(self.tranform(images))
         label = torch.from_numpy(np.array(label))
-        image = torch.from_numpy(image)
+        images = torch.from_numpy(images)
 
-        return image, label, link
+        return images, label, link
 
+
+class EmbeddingGenerator:
+
+    def __init__(self, model: torch.nn.Module, device: str):
+        self.config: EmbeddingConfig = EmbeddingConfig()
+        self.mongo: MongoDBClient = MongoDBClient()
+        self.model: torch.nn.Module = model
+        self.device = device
+        self.emebedding_model:torch.nn.Sequential = self.load_model()
+        self.emebedding_model.eval()
+
+
+    def load_model(self):
+        model = self.model.to(self.device)
+        model.load_state_dict(torch.load(self.config.PATH, map_location=self.device))
+        return nn.Sequential(*list(model.children())[:-1])
+
+    def run_step(self, batch_num, images, labels, s3_links):
+
+        try:
+            logging.info("about to start the process in Emebedding Generator")
+
+            record = dict()
+
+            # getting the embeddings
+            images = self.emebedding_model(images.to(self.device))
+            images = images.detach().cpu().numpy()
+
+            record["images"] = images.tolist()
+            record["labels"] = labels.tolist()
+            record["s3_links"] = s3_links
+            
+            # Creating DF with image label and s3_links
+            df = pd.DataFrame(record)
+
+            # inserting the info to mongo
+            records = list(json.loads(df.T.to_json()).values())
+            self.mongo.insert_bulk_records(records)
+
+            logging.info(f"operation complete for batch {batch_num}")
+
+        except Exception as e:
+            error = CustomException(e, sys)
+            logging.error(error.error_message)
+            raise error
+
+if __name__ == "__main__":
+    dp = DataPreprocessing()
+    loaders = dp.run_step()
+
+    # just a small sample to test thing out
+    data = ImageFolder(label_map=loaders["valid_data_loader"][1].class_to_idx)
+    dataloader = DataLoader(dataset=data, batch_size=64, shuffle=True)
+    embeds = EmbeddingGenerator(model=NeuralNet(), device="cpu")
+
+    for batch_num, values in tqdm(enumerate(dataloader)):
+        img, target, link = values
+        print(embeds.run_step(batch_num, img, target, link))
