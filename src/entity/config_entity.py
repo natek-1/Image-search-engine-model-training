@@ -73,8 +73,27 @@ class ModelConfig:
 class TrainerConfig:
     def __init__(self):
         self.PATH = os.path.join(from_root(), "model", "finetuned", "model.pth")
-        self.epoch = 5
+        self.epoch = 6
         self.evaluation = True
     
     def get_trainer_config(self):
         return self.__dict__
+
+class ImageFolderConfig:
+    def __init__(self):
+        self.ROOT_DIR = os.path.join(from_root(), "data", "raw", "images")
+        self.IMAGE_SIZE = 256
+        self.LABEL_MAP = {}
+        self.BUCKET = os.environ['AWS_BUCKET_NAME']
+        self.S3_LINK = "https://{0}.s3.us-west-2.amazonaws.com/images/{1}/{2}"
+    
+    def get_image_folderconfig(self):
+        return self.__dict__
+
+class EmbeddingConfig:
+    def __init__(self):
+        self.PATH = os.path.join(from_root(), "model", "finetuned", "model.pth")
+    
+    def get_embedding_config(self):
+        return self.__dict__
+
