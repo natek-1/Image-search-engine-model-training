@@ -99,3 +99,10 @@ class EmbeddingConfig:
     def get_embedding_config(self):
         return self.__dict__
 
+class AnnoyConfig:
+    def __init__(self):
+        self.EMBEDDING_PATH = os.path.join(from_root(), "data", "embeddings", "mbeddings.ann")
+    
+    def get_annoy_config(self):
+        return self.__dict__
+
