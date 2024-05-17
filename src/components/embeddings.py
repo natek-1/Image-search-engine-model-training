@@ -117,9 +117,11 @@ class EmbeddingGenerator:
 
             # inserting the info to mongo
             records = list(json.loads(df.T.to_json()).values())
-            self.mongo.insert_bulk_records(records)
+            #self.mongo.insert_bulk_records(records)
 
             logging.info(f"operation complete for batch {batch_num}")
+            
+            return {"Response": f"Completed Embeddings Generation for {batch_num}."}
 
         except Exception as e:
             error = CustomException(e, sys)
@@ -133,8 +135,9 @@ if __name__ == "__main__":
     # just a small sample to test thing out
     data = ImageFolder(label_map=loaders["valid_data_loader"][1].class_to_idx)
     dataloader = DataLoader(dataset=data, batch_size=64, shuffle=True)
-    embeds = EmbeddingGenerator(model=NeuralNet(), device="cpu")
-
+    embeds = EmbeddingGenerator(model=NeuralNet(), device="mps")
+    print(len(dataloader))
     for batch_num, values in tqdm(enumerate(dataloader)):
         img, target, link = values
         print(embeds.run_step(batch_num, img, target, link))
+        break

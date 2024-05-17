@@ -2,7 +2,7 @@ import sys, json
 from typing_extensions import Literal
 
 from tqdm import tqdm
-from annoy import _Vector, AnnoyIndex
+from annoy import AnnoyIndex
 
 
 from src.utils.database_handler import MongoDBClient
@@ -42,18 +42,20 @@ class CustomAnnoy(AnnoyIndex):
 class Annoy(object):
 
     def __init__(self):
-        self.config: AnnoyConfig = Annoy()
+        self.config: AnnoyConfig = AnnoyConfig()
         self.mongo: MongoDBClient= MongoDBClient()
-        self.result = self.mongo.get_collection_document()["info"]
+        self.result = self.mongo.get_collection_document()["Info"]
 
     
     def build_annoy_format(self):
         try:
             Ann = CustomAnnoy(256, "euclidean")
             logging.info("Building custo annoy")
+
             for i, record in tqdm(enumerate(self.result)):
-                Ann.add_item(i, record["images"], record["s3_link"])
+                Ann.add_item(i, record["images"], record["s3_links"])
             logging.info("added items to custom annoy")
+
             Ann.build(100)
             Ann.save(self.config.EMBEDDING_PATH)
             logging.info(f"annoy was saved to {self.config.EMBEDDING_PATH}")
