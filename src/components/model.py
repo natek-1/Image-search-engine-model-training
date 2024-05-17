@@ -30,7 +30,7 @@ class NeuralNet(nn.Module):
         model = torch.hub.load(
             self.config.REPO,
             self.config.BASEMODEL,
-            pretrained=self.config.PRETRAINED
+            weights=self.config.PRETRAINED
         )
         return nn.Sequential(*list(model.children())[:-2])
 

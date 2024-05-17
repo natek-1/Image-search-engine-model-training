@@ -53,7 +53,7 @@ class DataIngestion:
 
 if __name__ == "__main__":
     paths = ["data", r"data/raw", r"data/split", r"data/embeddings",
-             "model", r"model/benchmark", r"model/fintued"]
+             "model", r"model/benchmark", r"model/finetuned"]
     for folder in paths:
         path = os.path.join(from_root(), folder)
         if not os.path.exists(path):

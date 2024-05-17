@@ -62,9 +62,9 @@ class DataPreprocessingConfig:
 class ModelConfig:
     def __init__(self):
         self.PATH = os.path.join(from_root(), "model", "benchmark")
-        self.REPO = "pytorch/vision:v0.10.0"
+        self.REPO = "pytorch/vision:v0.13.0"
         self.BASEMODEL = "resnet18"
-        self.PRETRAINED = True
+        self.PRETRAINED = "ResNet18_Weights.DEFAULT"
         self.NUM_LABEL = 101
     
     def get_model_config(self):
@@ -73,7 +73,7 @@ class ModelConfig:
 class TrainerConfig:
     def __init__(self):
         self.PATH = os.path.join(from_root(), "model", "finetuned", "model.pth")
-        self.epoch = 6
+        self.epoch = 5
         self.evaluation = True
     
     def get_trainer_config(self):
