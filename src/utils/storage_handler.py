@@ -33,12 +33,16 @@ class S3Connector:
         #print(self.config.ZIP_PATHS)
         #for path, name in self.config.ZIP_PATHS:
         #    folder.add(path, name)
-        self.s3.meta.client.upload_file(self.config.ZIP_NAME, self.config.BUCKET,
-                                        f'{self.config.KEY}/{self.config.ZIP_NAME}')
-        os.remove(self.config.ZIP_NAME)
+        #self.s3.meta.client.upload_file(self.config.ZIP_NAME, self.config.BUCKET,
+        #                                f'{self.config.KEY}/{self.config.ZIP_NAME}')
+        
+        for path, name in self.config.ZIP_PATHS:
+            self.s3.meta.client.upload_file(path, self.config.BUCKET,
+                                            f'{self.config.KEY}/{name}')
+        
     
     def pull_artifacts(self):
-        #self.bucket.download_file(f'{self.config.KEY}/{self.config.ZIP_NAME}', self.config.ZIP_NAME)
+        self.bucket.download_file(f'{self.config.KEY}/{self.config.ZIP_NAME}', self.config.ZIP_NAME)
         print(self.config.ZIP_NAME)
         with zipfile.ZipFile(self.config.ZIP_NAME, 'r') as zip_ref:
             zip_ref.extractall()
